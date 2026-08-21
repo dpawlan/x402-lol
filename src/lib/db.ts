@@ -28,6 +28,7 @@ interface DbListing {
   network: string;
   asset: string;
   price_per_call: string;
+  icon_url?: string | null;
   created_at: string | Date;
 }
 
@@ -224,6 +225,7 @@ async function runMigrations(client: NeonQueryFunction<false, false>): Promise<v
         network TEXT NOT NULL DEFAULT 'base',
         asset TEXT NOT NULL DEFAULT 'USDC',
         price_per_call TEXT NOT NULL DEFAULT '$0.001',
+        icon_url TEXT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `;
@@ -243,6 +245,7 @@ async function runMigrations(client: NeonQueryFunction<false, false>): Promise<v
     `;
     await client`ALTER TABLE activity ADD COLUMN IF NOT EXISTS tx_hash TEXT`;
     await client`ALTER TABLE activity ADD COLUMN IF NOT EXISTS payer TEXT`;
+    await client`ALTER TABLE listings ADD COLUMN IF NOT EXISTS icon_url TEXT`;
 
     await client`
       CREATE TABLE IF NOT EXISTS clicks (
@@ -313,6 +316,7 @@ function dbRowToListing(row: DbListing): Listing {
     network: row.network,
     asset: row.asset,
     pricePerCall: row.price_per_call,
+    iconUrl: row.icon_url ?? null,
     createdAt: toISOString(row.created_at),
   };
 }
@@ -379,7 +383,8 @@ export async function createOrUpdateListing(
   resourceUrl?: string,
   network?: string,
   pricePerCall?: string,
-  payment?: { txHash: string; payer: string | null }
+  payment?: { txHash: string; payer: string | null },
+  iconUrl?: string | null
 ): Promise<{ listing: Listing; amountCharged: number; isNew: boolean }> {
   const client = getSql();
 
@@ -396,6 +401,7 @@ export async function createOrUpdateListing(
       if (resourceUrl) existing.resource_url = resourceUrl;
       if (network) existing.network = network;
       if (pricePerCall) existing.price_per_call = pricePerCall;
+      if (iconUrl) existing.icon_url = iconUrl;
 
       const sortedListings = Array.from(store.listings.values()).sort((a, b) => Number(b.bid_usdc) - Number(a.bid_usdc));
       const rank = sortedListings.findIndex((l) => l.id === existing.id) + 1;
@@ -426,6 +432,7 @@ export async function createOrUpdateListing(
         network: network || "base",
         asset: "USDC",
         price_per_call: pricePerCall || "$0.001",
+        icon_url: iconUrl ?? null,
         created_at: now,
       };
       store.listings.set(id, newListing);
@@ -461,7 +468,8 @@ export async function createOrUpdateListing(
           description = COALESCE(NULLIF(${description || ""}, ''), description),
           resource_url = COALESCE(NULLIF(${resourceUrl || ""}, ''), resource_url),
           network = COALESCE(NULLIF(${network || ""}, ''), network),
-          price_per_call = COALESCE(NULLIF(${pricePerCall || ""}, ''), price_per_call)
+          price_per_call = COALESCE(NULLIF(${pricePerCall || ""}, ''), price_per_call),
+          icon_url = COALESCE(NULLIF(${iconUrl || ""}, ''), icon_url)
       WHERE id = ${existing.id}
     `;
 
@@ -478,8 +486,8 @@ export async function createOrUpdateListing(
   } else {
     const displayName = name || new URL(url).hostname;
     const result = await client`
-      INSERT INTO listings (name, url, description, bid_usdc, resource_url, network, price_per_call)
-      VALUES (${displayName}, ${url}, ${description || ""}, ${bidAmount}, ${resourceUrl || url}, ${network || "base"}, ${pricePerCall || "$0.001"})
+      INSERT INTO listings (name, url, description, bid_usdc, resource_url, network, price_per_call, icon_url)
+      VALUES (${displayName}, ${url}, ${description || ""}, ${bidAmount}, ${resourceUrl || url}, ${network || "base"}, ${pricePerCall || "$0.001"}, ${iconUrl ?? null})
       RETURNING id
     ` as { id: number }[];
 
@@ -607,7 +615,7 @@ export async function getTopBid(): Promise<number> {
   return Number(rows[0]?.max_bid) || 0;
 }
 
-export async function getStats(): Promise<{ totalListings: number; totalClicks: number; totalBids: number }> {
+export async function getStats(): Promise<{ totalListings: number; totalClicks: number; totalBids: number; totalUsdc: number }> {
   const client = getSql();
 
   if (!client) {
@@ -616,7 +624,8 @@ export async function getStats(): Promise<{ totalListings: number; totalClicks: 
     return {
       totalListings: listings.length,
       totalClicks: listings.reduce((sum, l) => sum + l.clicks, 0),
-      totalBids: listings.reduce((sum, l) => sum + Number(l.bid_usdc), 0),
+      totalBids: store.activity.length,
+      totalUsdc: listings.reduce((sum, l) => sum + Number(l.bid_usdc), 0),
     };
   }
 
@@ -625,13 +634,15 @@ export async function getStats(): Promise<{ totalListings: number; totalClicks: 
     SELECT 
       COUNT(*)::int as total_listings,
       COALESCE(SUM(clicks), 0)::int as total_clicks,
-      COALESCE(SUM(bid_usdc), 0) as total_bids
+      COALESCE(SUM(bid_usdc), 0) as total_usdc,
+      (SELECT COUNT(*)::int FROM activity) as total_bids
     FROM listings
-  ` as { total_listings: number; total_clicks: number; total_bids: string }[];
+  ` as { total_listings: number; total_clicks: number; total_usdc: string; total_bids: number }[];
 
   return {
     totalListings: rows[0]?.total_listings || 0,
     totalClicks: rows[0]?.total_clicks || 0,
-    totalBids: Number(rows[0]?.total_bids) || 0,
+    totalBids: rows[0]?.total_bids || 0,
+    totalUsdc: Number(rows[0]?.total_usdc) || 0,
   };
 }

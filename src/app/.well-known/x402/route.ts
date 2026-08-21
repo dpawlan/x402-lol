@@ -71,7 +71,6 @@ export async function GET() {
     links: {
       homepage: "https://x402.lol",
       api: "https://x402.lol/api/leaderboard",
-      about: "https://x402.lol/about",
       rules: "https://x402.lol/rules",
     },
     contact: {

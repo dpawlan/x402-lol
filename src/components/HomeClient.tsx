@@ -5,7 +5,7 @@ import { ClaimForm } from "@/components/ClaimForm";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { TrendingList } from "@/components/TrendingList";
 import { ListingCard, ListingCardCompact } from "@/components/ListingCard";
-import { StatsBar } from "@/components/StatsBar";
+import { StatsBar, type SiteStats } from "@/components/StatsBar";
 import { BidModal } from "@/components/BidModal";
 import type { LeaderboardEntry, Activity, TrendingItem } from "@/lib/types";
 
@@ -17,8 +17,7 @@ export function HomeClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState<LeaderboardEntry | null>(null);
-  const [onlineCount] = useState(() => Math.floor(Math.random() * 500) + 100);
-  const [totalVisitors] = useState(() => Math.floor(Math.random() * 50000) + 10000);
+  const [stats, setStats] = useState<SiteStats | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -29,6 +28,7 @@ export function HomeClient() {
         setActivities(data.data.recentActivity);
         setTrending(data.data.trending);
         setTopBid(data.data.topBid);
+        setStats(data.data.stats ?? null);
       }
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -115,7 +115,7 @@ export function HomeClient() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="mb-8">
-        <StatsBar onlineCount={onlineCount} totalVisitors={totalVisitors} />
+        <StatsBar stats={stats} />
       </div>
 
       <div className="mb-12">
@@ -147,8 +147,8 @@ export function HomeClient() {
         ))}
 
         {leaderboard.length === 0 && (
-          <div className="rounded-xl border border-stone-200 bg-white p-8 text-center dark:border-stone-700 dark:bg-stone-800">
-            <p className="text-stone-500 dark:text-stone-400">
+          <div className="rounded-xl border border-stone-200 bg-white p-8 text-center">
+            <p className="text-stone-500">
               No listings yet. Be the first to claim #1!
             </p>
           </div>

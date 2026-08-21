@@ -6,19 +6,19 @@ export const metadata = {
 export default function RulesPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="mb-6 text-3xl font-bold text-stone-900 dark:text-stone-100">
+      <h1 className="mb-6 text-3xl font-bold text-stone-900">
         Rules
       </h1>
 
       <div className="space-y-8">
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             1. Eligible Resources
           </h2>
-          <p className="text-stone-600 dark:text-stone-400">
+          <p className="text-stone-600">
             Only x402-compatible resources may be listed. This includes:
           </p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600 dark:text-stone-400">
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600">
             <li>APIs that respond with HTTP 402 and accept x402 payments</li>
             <li>AI agents that can make or receive x402 payments</li>
             <li>Merchants and services accepting x402</li>
@@ -28,10 +28,10 @@ export default function RulesPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             2. Bidding
           </h2>
-          <ul className="list-disc space-y-2 pl-5 text-stone-600 dark:text-stone-400">
+          <ul className="list-disc space-y-2 pl-5 text-stone-600">
             <li>
               <strong>Minimum bid:</strong> $1 USDC
             </li>
@@ -49,10 +49,10 @@ export default function RulesPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             3. Ranking
           </h2>
-          <ul className="list-disc space-y-2 pl-5 text-stone-600 dark:text-stone-400">
+          <ul className="list-disc space-y-2 pl-5 text-stone-600">
             <li>Resources are ranked by cumulative bid amount (highest first)</li>
             <li>Ties are broken by earliest bid timestamp</li>
             <li>Claiming a specific rank requires bidding at least $1 more than that rank</li>
@@ -61,13 +61,13 @@ export default function RulesPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             4. Listing Information
           </h2>
-          <p className="text-stone-600 dark:text-stone-400">
+          <p className="text-stone-600">
             Each listing includes:
           </p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600 dark:text-stone-400">
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600">
             <li>
               <strong>Name:</strong> Display name for the resource
             </li>
@@ -93,27 +93,27 @@ export default function RulesPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             5. Machine Access
           </h2>
-          <p className="text-stone-600 dark:text-stone-400">
+          <p className="text-stone-600">
             Agents and scripts can access:
           </p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600 dark:text-stone-400">
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600">
             <li>
-              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-sm dark:bg-stone-800">
+              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-sm">
                 GET /api/leaderboard
               </code>{" "}
               — Full ranked list with metadata
             </li>
             <li>
-              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-sm dark:bg-stone-800">
+              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-sm">
                 GET /.well-known/x402
               </code>{" "}
               — Discovery document
             </li>
             <li>
-              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-sm dark:bg-stone-800">
+              <code className="rounded bg-stone-100 px-1.5 py-0.5 text-sm">
                 POST /api/bid
               </code>{" "}
               — Submit a bid (x402 payment required)
@@ -122,34 +122,22 @@ export default function RulesPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             6. No Refunds
           </h2>
-          <p className="text-stone-600 dark:text-stone-400">
+          <p className="text-stone-600">
             All bids are final. Once a payment settles on-chain, it cannot be reversed.
             Make sure your listing information is correct before bidding.
           </p>
         </section>
 
         <section>
-          <h2 className="mb-3 text-xl font-semibold text-stone-900 dark:text-stone-100">
+          <h2 className="mb-3 text-xl font-semibold text-stone-900">
             7. Content Policy
           </h2>
-          <p className="text-stone-600 dark:text-stone-400">
+          <p className="text-stone-600">
             Resources must be legal and not primarily designed for harm. We reserve the
             right to remove listings that violate this policy (bids are not refunded).
-          </p>
-        </section>
-
-        <section className="rounded-lg bg-coral/10 p-4">
-          <h2 className="mb-2 text-lg font-semibold text-coral">
-            Mock Mode
-          </h2>
-          <p className="text-sm text-stone-600 dark:text-stone-400">
-            When the <code className="rounded bg-white/50 px-1 py-0.5 dark:bg-stone-800/50">X402_PAY_TO_ADDRESS</code> environment
-            variable is not set, the site runs in mock mode. Bids are recorded but no
-            real x402 payment is required. This is useful for local development and
-            testing.
           </p>
         </section>
       </div>

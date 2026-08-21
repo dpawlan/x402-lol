@@ -32,10 +32,10 @@ export function ListingCard({ listing, onClaim, onClick }: ListingCardProps) {
 
   return (
     <div
-      className={`group relative rounded-xl border bg-white p-4 transition-all hover:shadow-md dark:bg-stone-800 ${
+      className={`group relative rounded-xl border bg-white p-4 transition-all hover:shadow-md ${
         isTopThree
-          ? "border-2 border-coral/20 dark:border-coral/30"
-          : "border-stone-200 dark:border-stone-700"
+          ? "border-2 border-coral/20"
+          : "border-stone-200"
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -53,9 +53,9 @@ export function ListingCard({ listing, onClaim, onClick }: ListingCardProps) {
               #{listing.rank}
             </div>
           )}
-          <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-stone-100 dark:bg-stone-700">
+          <div className="relative h-10 w-10 overflow-hidden rounded-lg bg-stone-100">
             <Image
-              src={getFaviconUrl(listing.url)}
+              src={getFaviconUrl(listing.url, listing.iconUrl)}
               alt={listing.name}
               fill
               className="object-cover"
@@ -67,10 +67,10 @@ export function ListingCard({ listing, onClaim, onClick }: ListingCardProps) {
         <div className="min-w-0 flex-1 cursor-pointer" onClick={handleClick}>
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <h3 className="font-semibold text-stone-900 dark:text-stone-100">
+              <h3 className="font-semibold text-stone-900">
                 {extractDomain(listing.url)}
               </h3>
-              <p className="mt-1 line-clamp-2 text-sm text-stone-600 dark:text-stone-400">
+              <p className="mt-1 line-clamp-2 text-sm text-stone-600">
                 {listing.description}
               </p>
               <div className="mt-2 flex items-center gap-3 text-xs text-stone-400">
@@ -108,14 +108,14 @@ export function ListingCardCompact({ listing, onClaim, onClick }: ListingCardPro
 
   return (
     <div
-      className="group relative flex items-center justify-between rounded-lg border border-stone-200 bg-white px-4 py-3 transition-all hover:shadow-sm dark:border-stone-700 dark:bg-stone-800"
+      className="group relative flex items-center justify-between rounded-lg border border-stone-200 bg-white px-4 py-3 transition-all hover:shadow-sm"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center gap-3">
         <span className="w-6 text-sm font-medium text-stone-400">#{listing.rank}</span>
         <Image
-          src={getFaviconUrl(listing.url)}
+          src={getFaviconUrl(listing.url, listing.iconUrl)}
           alt=""
           width={24}
           height={24}
@@ -123,10 +123,10 @@ export function ListingCardCompact({ listing, onClaim, onClick }: ListingCardPro
           unoptimized
         />
         <div className="min-w-0 cursor-pointer" onClick={() => onClick(listing)}>
-          <h4 className="font-medium text-stone-900 dark:text-stone-100">
+          <h4 className="font-medium text-stone-900">
             {extractDomain(listing.url)}
           </h4>
-          <p className="truncate text-sm text-stone-500 dark:text-stone-400 max-w-md">
+          <p className="truncate text-sm text-stone-500 max-w-md">
             {listing.description}
           </p>
         </div>

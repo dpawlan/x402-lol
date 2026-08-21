@@ -10,8 +10,8 @@ interface TrendingListProps {
 
 export function TrendingList({ items }: TrendingListProps) {
   return (
-    <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800">
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-900 dark:text-stone-100">
+    <div className="rounded-xl bg-white p-4 shadow-sm">
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-900">
         <span className="text-lg">🔥</span>
         Trending right now
       </h3>
@@ -34,12 +34,12 @@ export function TrendingList({ items }: TrendingListProps) {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-stone-700 hover:text-coral dark:text-stone-300"
+                className="font-medium text-stone-700 hover:text-coral"
               >
                 {extractDomain(item.url)}
               </a>
             </div>
-            <span className="text-stone-400 dark:text-stone-500">
+            <span className="text-stone-400">
               {formatNumber(item.clicksPerHour)} clicks/h
             </span>
           </li>

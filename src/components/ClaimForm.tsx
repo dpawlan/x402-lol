@@ -49,7 +49,7 @@ export function ClaimForm({ topBid, onSubmit, initialUrl = "", initialAmount }: 
 
   return (
     <div className="text-center">
-      <h1 className="mb-2 text-4xl font-bold text-stone-900 dark:text-stone-100">
+      <h1 className="mb-2 text-4xl font-bold text-stone-900">
         Claim #1 for{" "}
         <span className="inline-flex items-center gap-2 align-middle">
           <button
@@ -57,7 +57,7 @@ export function ClaimForm({ topBid, onSubmit, initialUrl = "", initialAmount }: 
             aria-label="Decrease bid by $1"
             title="Decrease bid"
             disabled={currentBid <= 1}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300 text-base font-medium leading-none text-stone-500 transition-colors hover:border-coral hover:text-coral disabled:cursor-not-allowed disabled:opacity-30 dark:border-stone-600 dark:text-stone-400"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300 text-base font-medium leading-none text-stone-500 transition-colors hover:border-coral hover:text-coral disabled:cursor-not-allowed disabled:opacity-30"
             type="button"
           >
             &minus;
@@ -67,20 +67,20 @@ export function ClaimForm({ topBid, onSubmit, initialUrl = "", initialAmount }: 
             onClick={incrementBid}
             aria-label="Increase bid by $1"
             title="Increase bid"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300 text-base font-medium leading-none text-stone-500 transition-colors hover:border-coral hover:text-coral dark:border-stone-600 dark:text-stone-400"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300 text-base font-medium leading-none text-stone-500 transition-colors hover:border-coral hover:text-coral"
             type="button"
           >
             +
           </button>
         </span>
       </h1>
-      <p className="mb-6 text-sm text-stone-500 dark:text-stone-400">
+      <p className="mb-6 text-sm text-stone-500">
         <span className="text-coral">New spots start at $1.</span> Paying less than the #1 price
         still puts you on the board at whatever place that bid can take.
       </p>
 
       <form onSubmit={handleSubmit} className="mx-auto max-w-xl">
-        <div className="flex overflow-hidden rounded-full border border-stone-200 bg-white shadow-sm dark:border-stone-700 dark:bg-stone-800">
+        <div className="flex overflow-hidden rounded-full border border-stone-200 bg-white shadow-sm">
           <div className="flex items-center pl-4 text-stone-400">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -96,7 +96,7 @@ export function ClaimForm({ topBid, onSubmit, initialUrl = "", initialAmount }: 
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="Your x402 resource URL or @handle"
-            className="flex-1 bg-transparent px-3 py-3 text-stone-900 placeholder-stone-400 outline-none dark:text-stone-100"
+            className="flex-1 bg-transparent px-3 py-3 text-stone-900 placeholder-stone-400 outline-none"
           />
           <button
             type="submit"
@@ -107,7 +107,7 @@ export function ClaimForm({ topBid, onSubmit, initialUrl = "", initialAmount }: 
           </button>
         </div>
         {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-        <p className="mt-3 text-xs text-stone-400 dark:text-stone-500">
+        <p className="mt-3 text-xs text-stone-400">
           Already on the list? Enter the same URL or @handle and up your bid — you only pay the
           difference.
         </p>

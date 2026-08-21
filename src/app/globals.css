@@ -16,21 +16,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-.dark {
-  --background: #0c0a09;
-  --foreground: #fafaf9;
-  --cream: #1c1917;
-  --coral: #f97066;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.light) {
-    --background: #0c0a09;
-    --foreground: #fafaf9;
-    --cream: #1c1917;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);

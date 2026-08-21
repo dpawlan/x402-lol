@@ -1,23 +1,32 @@
-"use client";
+import { formatNumber, formatCurrency } from "@/lib/utils";
 
-import { formatNumber } from "@/lib/utils";
-
-interface StatsBarProps {
-  onlineCount: number;
-  totalVisitors: number;
+export interface SiteStats {
+  totalListings: number;
+  totalBids: number;
+  totalClicks: number;
+  totalUsdc: number;
 }
 
-export function StatsBar({ onlineCount, totalVisitors }: StatsBarProps) {
+export function StatsBar({ stats }: { stats: SiteStats | null }) {
+  if (!stats) return null;
+  const item = (label: string, value: string) => (
+    <span>
+      <span className="font-semibold text-stone-800">{value}</span> {label}
+    </span>
+  );
   return (
-    <div className="text-center text-sm text-stone-500 dark:text-stone-400">
-      <span className="inline-flex items-center gap-1.5">
-        <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-green-500"></span>
-        <span className="text-green-600 dark:text-green-400">{formatNumber(onlineCount)} online</span>
-      </span>
-      <span className="mx-2">·</span>
-      <span>{formatNumber(totalVisitors)} visitors since launch</span>
-      <span className="mx-2">·</span>
-      <a href="/api/leaderboard" className="text-coral hover:underline">see stats →</a>
+    <div className="flex flex-wrap items-center justify-center gap-x-2 text-center text-sm text-stone-500">
+      {item(stats.totalListings === 1 ? "listing" : "listings", formatNumber(stats.totalListings))}
+      <span>·</span>
+      {item("bid to date", formatCurrency(stats.totalUsdc))}
+      <span>·</span>
+      {item(stats.totalBids === 1 ? "bid" : "bids", formatNumber(stats.totalBids))}
+      <span>·</span>
+      {item(stats.totalClicks === 1 ? "click" : "clicks", formatNumber(stats.totalClicks))}
+      <span>·</span>
+      <a href="/api/leaderboard" className="text-coral hover:underline">
+        raw data →
+      </a>
     </div>
   );
 }

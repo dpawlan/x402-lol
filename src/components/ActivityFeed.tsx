@@ -10,8 +10,8 @@ interface ActivityFeedProps {
 
 export function ActivityFeed({ activities }: ActivityFeedProps) {
   return (
-    <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-stone-800">
-      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-900 dark:text-stone-100">
+    <div className="rounded-xl bg-white p-4 shadow-sm">
+      <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-900">
         <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-red-500"></span>
         Latest activity
       </h3>
@@ -34,7 +34,7 @@ export function ActivityFeed({ activities }: ActivityFeedProps) {
                 href={activity.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-stone-700 hover:text-coral dark:text-stone-300"
+                className="font-medium text-stone-700 hover:text-coral"
               >
                 {extractDomain(activity.url)}
               </a>
@@ -42,7 +42,7 @@ export function ActivityFeed({ activities }: ActivityFeedProps) {
                 at #{activity.rank} · ${activity.bidAmount}
               </span>
             </div>
-            <span className="text-stone-400 dark:text-stone-500">
+            <span className="text-stone-400">
               {formatTimeAgo(activity.createdAt)}
             </span>
           </li>

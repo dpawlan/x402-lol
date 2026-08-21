@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOrUpdateListing } from "@/lib/db";
+import { resolveFavicon } from "@/lib/favicon";
 import {
   isMockMode,
   isPaymentConfigured,
@@ -119,6 +120,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const iconUrl = await resolveFavicon(normalizedUrl).catch(() => null);
+
     const result = await createOrUpdateListing(
       normalizedUrl,
       fields.name,
@@ -127,7 +130,8 @@ export async function POST(request: NextRequest) {
       fields.resourceUrl,
       fields.network,
       fields.pricePerCall,
-      payment?.ok ? { txHash: payment.payment.txHash, payer: payment.payment.payer } : undefined
+      payment?.ok ? { txHash: payment.payment.txHash, payer: payment.payment.payer } : undefined,
+      iconUrl
     );
 
     const headers: Record<string, string> = { "Cache-Control": "no-store" };

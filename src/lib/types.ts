@@ -10,6 +10,7 @@ export interface Listing {
   network: string;
   asset: string;
   pricePerCall: string;
+  iconUrl: string | null;
   createdAt: string;
 }
 

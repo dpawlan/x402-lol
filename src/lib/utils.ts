@@ -43,10 +43,11 @@ export function extractDomain(url: string): string {
   }
 }
 
-export function getFaviconUrl(url: string): string {
+export function getFaviconUrl(url: string, iconUrl?: string | null): string {
+  if (iconUrl) return iconUrl;
   try {
     const domain = extractDomain(url);
-    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    return `https://icons.duckduckgo.com/ip3/${domain}.ico`;
   } catch {
     return "/favicon.ico";
   }

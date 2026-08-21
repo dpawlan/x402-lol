@@ -93,14 +93,14 @@ export function BidModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl dark:bg-stone-800">
+      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-stone-900 dark:text-stone-100">
+          <h2 className="text-xl font-bold text-stone-900">
             {existingListing ? "Update Listing" : "Add New Listing"}
           </h2>
           <button
             onClick={onClose}
-            className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300"
+            className="text-stone-400 hover:text-stone-600"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -110,7 +110,7 @@ export function BidModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            <label className="mb-1 block text-sm font-medium text-stone-700">
               URL *
             </label>
             <input
@@ -119,12 +119,12 @@ export function BidModal({
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://your-api.example.com"
               disabled={!!existingListing}
-              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral disabled:bg-stone-100 dark:border-stone-600 dark:bg-stone-700 dark:text-stone-100 dark:disabled:bg-stone-800"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral disabled:bg-stone-100"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            <label className="mb-1 block text-sm font-medium text-stone-700">
               Name
             </label>
             <input
@@ -132,12 +132,12 @@ export function BidModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="My API Service"
-              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral dark:border-stone-600 dark:bg-stone-700 dark:text-stone-100"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            <label className="mb-1 block text-sm font-medium text-stone-700">
               Description
             </label>
             <textarea
@@ -145,12 +145,12 @@ export function BidModal({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What does your x402 resource do?"
               rows={2}
-              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral dark:border-stone-600 dark:bg-stone-700 dark:text-stone-100"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            <label className="mb-1 block text-sm font-medium text-stone-700">
               x402 Endpoint URL
             </label>
             <input
@@ -158,12 +158,12 @@ export function BidModal({
               value={resourceUrl}
               onChange={(e) => setResourceUrl(e.target.value)}
               placeholder="https://your-api.example.com/api/endpoint"
-              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral dark:border-stone-600 dark:bg-stone-700 dark:text-stone-100"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            <label className="mb-1 block text-sm font-medium text-stone-700">
               Price per Call
             </label>
             <input
@@ -171,19 +171,19 @@ export function BidModal({
               value={pricePerCall}
               onChange={(e) => setPricePerCall(e.target.value)}
               placeholder="$0.001"
-              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral dark:border-stone-600 dark:bg-stone-700 dark:text-stone-100"
+              className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-stone-900 placeholder-stone-400 outline-none focus:border-coral focus:ring-1 focus:ring-coral"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-stone-700 dark:text-stone-300">
+            <label className="mb-1 block text-sm font-medium text-stone-700">
               {existingListing ? "New Total Bid (USDC)" : "Bid Amount (USDC)"} *
             </label>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setBidAmount((prev) => Math.max(existingListing ? existingListing.bidUsdc + 1 : 1, prev - 1))}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-100 dark:border-stone-600 dark:text-stone-400 dark:hover:bg-stone-700"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-100"
               >
                 -
               </button>
@@ -192,12 +192,12 @@ export function BidModal({
                 value={bidAmount}
                 onChange={(e) => setBidAmount(Math.max(1, parseInt(e.target.value) || 1))}
                 min={existingListing ? existingListing.bidUsdc + 1 : 1}
-                className="flex-1 rounded-lg border border-stone-300 bg-white px-3 py-2 text-center text-lg font-semibold text-stone-900 outline-none focus:border-coral focus:ring-1 focus:ring-coral dark:border-stone-600 dark:bg-stone-700 dark:text-stone-100"
+                className="flex-1 rounded-lg border border-stone-300 bg-white px-3 py-2 text-center text-lg font-semibold text-stone-900 outline-none focus:border-coral focus:ring-1 focus:ring-coral"
               />
               <button
                 type="button"
                 onClick={() => setBidAmount((prev) => prev + 1)}
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-100 dark:border-stone-600 dark:text-stone-400 dark:hover:bg-stone-700"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-300 text-stone-600 hover:bg-stone-100"
               >
                 +
               </button>
@@ -218,7 +218,7 @@ export function BidModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-stone-300 px-4 py-2 font-medium text-stone-700 hover:bg-stone-50 dark:border-stone-600 dark:text-stone-300 dark:hover:bg-stone-700"
+              className="flex-1 rounded-lg border border-stone-300 px-4 py-2 font-medium text-stone-700 hover:bg-stone-50"
             >
               Cancel
             </button>

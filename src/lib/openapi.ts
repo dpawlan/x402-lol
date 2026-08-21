@@ -85,7 +85,8 @@ export function buildOpenApi() {
                             properties: {
                               totalListings: { type: "integer" },
                               totalClicks: { type: "integer" },
-                              totalBids: { type: "integer" },
+                              totalBids: { type: "integer", description: "Number of bids placed" },
+                              totalUsdc: { type: "number", description: "Total USDC bid across all listings" },
                             },
                           },
                         },
