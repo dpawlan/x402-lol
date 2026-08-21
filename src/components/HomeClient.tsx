@@ -86,7 +86,13 @@ export function HomeClient() {
       body: JSON.stringify(data),
     });
 
-    const result = await response.json();
+    const result = await response.json().catch(() => ({}));
+
+    if (response.status === 402) {
+      throw new Error(
+        "This endpoint is paid via x402. Use an x402-enabled client or agent (e.g. @x402/fetch, agentcash) to POST to /api/bid and it will pay automatically. See /api/bid for the schema."
+      );
+    }
 
     if (!response.ok) {
       throw new Error(result.error || "Failed to submit bid");

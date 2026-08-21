@@ -224,9 +224,13 @@ async function initializeDatabase(): Promise<void> {
         url TEXT NOT NULL,
         rank INTEGER NOT NULL,
         bid_amount NUMERIC NOT NULL,
+        tx_hash TEXT,
+        payer TEXT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       )
     `;
+    await client`ALTER TABLE activity ADD COLUMN IF NOT EXISTS tx_hash TEXT`;
+    await client`ALTER TABLE activity ADD COLUMN IF NOT EXISTS payer TEXT`;
 
     await client`
       CREATE TABLE IF NOT EXISTS clicks (
@@ -241,9 +245,11 @@ async function initializeDatabase(): Promise<void> {
     await client`CREATE INDEX IF NOT EXISTS idx_clicks_listing ON clicks(listing_id)`;
     await client`CREATE INDEX IF NOT EXISTS idx_clicks_created ON clicks(created_at)`;
 
-    const countResult = await client`SELECT COUNT(*) as count FROM listings`;
-    if (Number(countResult[0]?.count) === 0) {
-      await seedDatabase();
+    if (process.env.SEED_DEMO_DATA === "true") {
+      const countResult = await client`SELECT COUNT(*) as count FROM listings`;
+      if (Number(countResult[0]?.count) === 0) {
+        await seedDatabase();
+      }
     }
 
     dbInitialized = true;
@@ -360,7 +366,8 @@ export async function createOrUpdateListing(
   bidAmount: number,
   resourceUrl?: string,
   network?: string,
-  pricePerCall?: string
+  pricePerCall?: string,
+  payment?: { txHash: string; payer: string | null }
 ): Promise<{ listing: Listing; amountCharged: number; isNew: boolean }> {
   const client = getSql();
 
@@ -450,8 +457,8 @@ export async function createOrUpdateListing(
     const rank = leaderboard.findIndex((l) => l.id === existing.id) + 1;
 
     await client`
-      INSERT INTO activity (listing_id, name, url, rank, bid_amount)
-      VALUES (${existing.id}, ${existing.name}, ${existing.url}, ${rank}, ${bidAmount})
+      INSERT INTO activity (listing_id, name, url, rank, bid_amount, tx_hash, payer)
+      VALUES (${existing.id}, ${existing.name}, ${existing.url}, ${rank}, ${bidAmount}, ${payment?.txHash ?? null}, ${payment?.payer ?? null})
     `;
 
     const updated = await getListingById(existing.id);
@@ -471,8 +478,8 @@ export async function createOrUpdateListing(
     const rank = leaderboard.findIndex((l) => l.id === listingId) + 1;
 
     await client`
-      INSERT INTO activity (listing_id, name, url, rank, bid_amount)
-      VALUES (${listingId}, ${displayName}, ${url}, ${rank}, ${bidAmount})
+      INSERT INTO activity (listing_id, name, url, rank, bid_amount, tx_hash, payer)
+      VALUES (${listingId}, ${displayName}, ${url}, ${rank}, ${bidAmount}, ${payment?.txHash ?? null}, ${payment?.payer ?? null})
     `;
 
     const created = await getListingById(listingId);
