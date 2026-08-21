@@ -30,7 +30,22 @@ const IS_MOCK =
   process.env.X402_MOCK === "true" ||
   (process.env.NODE_ENV !== "production" && !PAY_TO_ADDRESS);
 
-const IS_CONFIGURED = IS_MOCK || /^0x[0-9a-fA-F]{40}$/.test(PAY_TO_ADDRESS);
+const HAS_CDP = Boolean(CDP_KEY_ID && CDP_KEY_SECRET);
+const TESTNET = "eip155:84532";
+// x402.org only settles Base Sepolia. Any other network needs CDP keys or an explicit facilitator.
+const FACILITATOR_SUPPORTS_NETWORK =
+  NETWORK === TESTNET || HAS_CDP || Boolean(process.env.X402_FACILITATOR_URL);
+
+const IS_CONFIGURED =
+  IS_MOCK || (/^0x[0-9a-fA-F]{40}$/.test(PAY_TO_ADDRESS) && FACILITATOR_SUPPORTS_NETWORK);
+
+export function paymentConfigProblem(): string | null {
+  if (IS_MOCK) return null;
+  if (!/^0x[0-9a-fA-F]{40}$/.test(PAY_TO_ADDRESS)) return "X402_PAY_TO_ADDRESS is not set";
+  if (!FACILITATOR_SUPPORTS_NETWORK)
+    return `No facilitator for ${NETWORK}: set CDP_API_KEY_ID/CDP_API_KEY_SECRET (or X402_FACILITATOR_URL)`;
+  return null;
+}
 
 let server: x402ResourceServer | null = null;
 let initPromise: Promise<void> | null = null;
@@ -38,7 +53,7 @@ let initPromise: Promise<void> | null = null;
 function getServer(): x402ResourceServer {
   if (server) return server;
   const facilitatorConfig =
-    CDP_KEY_ID && CDP_KEY_SECRET
+    HAS_CDP
       ? { ...createFacilitatorConfig(CDP_KEY_ID, CDP_KEY_SECRET), url: FACILITATOR_URL }
       : { url: FACILITATOR_URL };
   const facilitator = new HTTPFacilitatorClient(facilitatorConfig);

@@ -3,6 +3,7 @@ import { createOrUpdateListing } from "@/lib/db";
 import {
   isMockMode,
   isPaymentConfigured,
+  paymentConfigProblem,
   x402Config,
   buildPaymentRequired,
   verifyAndSettleBid,
@@ -77,6 +78,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (!isPaymentConfigured()) {
+      console.error("Bid refused, payment config problem:", paymentConfigProblem());
       return bad("Payments are not configured on this server yet. Check back soon.", 503);
     }
 
@@ -157,6 +159,7 @@ export async function GET() {
       network: x402Config.network,
       payTo: x402Config.isConfigured && !x402Config.isMock ? x402Config.payToAddress : null,
       isMock: isMockMode(),
+      ready: isPaymentConfigured(),
       howTo:
         "POST the JSON body without a payment header to receive a 402 with PAYMENT-REQUIRED. " +
         "Sign it with any x402 v2 client (e.g. @x402/fetch) and retry with PAYMENT-SIGNATURE.",
