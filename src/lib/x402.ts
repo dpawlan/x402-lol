@@ -7,6 +7,8 @@ import {
 import type { PaymentPayload, PaymentRequired, PaymentRequirements } from "@x402/core/types";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { createFacilitatorConfig } from "@coinbase/x402";
+import { declareDiscoveryExtension, bazaarResourceServerExtension } from "@x402/extensions/bazaar";
+import { bidRequestSchema, bidRequestExample, bidResponseSchema, bidResponseExample } from "@/lib/schemas";
 
 type Network = `${string}:${string}`;
 
@@ -57,7 +59,9 @@ function getServer(): x402ResourceServer {
       ? { ...createFacilitatorConfig(CDP_KEY_ID, CDP_KEY_SECRET), url: FACILITATOR_URL }
       : { url: FACILITATOR_URL };
   const facilitator = new HTTPFacilitatorClient(facilitatorConfig);
-  server = new x402ResourceServer(facilitator).register(NETWORK, new ExactEvmScheme());
+  server = new x402ResourceServer(facilitator)
+    .register(NETWORK, new ExactEvmScheme())
+    .registerExtension(bazaarResourceServerExtension);
   return server;
 }
 
@@ -89,13 +93,28 @@ export const x402Config = {
   isConfigured: IS_CONFIGURED,
 };
 
+const SITE_NAME = new URL(SITE_URL).hostname;
+
 function bidResourceInfo(amountUsdc: number) {
   return {
     url: `${SITE_URL}/api/bid`,
-    description: `Bid $${amountUsdc.toFixed(2)} USDC to rank on x402.lol`,
+    description: `Bid $${amountUsdc.toFixed(2)} USDC to rank an x402 resource on ${SITE_NAME}. Price equals the bidAmount in the request body (whole USD, min $1). Re-bidding the same url adds to its total.`,
     mimeType: "application/json",
+    serviceName: SITE_NAME,
+    tags: ["x402", "leaderboard", "directory", "discovery", "advertising"],
   };
 }
+
+/** Bazaar discovery extension: carries input/output schema on every 402 so agents can invoke blind. */
+const bidDiscoveryExtension = declareDiscoveryExtension({
+  bodyType: "json",
+  input: { ...bidRequestExample },
+  inputSchema: bidRequestSchema as unknown as Record<string, unknown>,
+  output: {
+    example: bidResponseExample,
+    schema: bidResponseSchema as unknown as Record<string, unknown>,
+  },
+});
 
 export async function buildBidRequirements(amountUsdc: number): Promise<PaymentRequirements[]> {
   const s = await getInitializedServer();
@@ -117,7 +136,8 @@ export async function buildPaymentRequired(
   const body = await s.createPaymentRequiredResponse(
     requirements,
     bidResourceInfo(amountUsdc),
-    error
+    error,
+    bidDiscoveryExtension
   );
   return { body, header: encodePaymentRequiredHeader(body) };
 }

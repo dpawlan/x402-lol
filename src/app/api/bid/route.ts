@@ -11,8 +11,8 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const MIN_BID = 1;
-const MAX_BID = 10_000;
+import { MIN_BID, MAX_BID } from "@/lib/openapi";
+
 const MAX_FIELD = 200;
 const MAX_DESCRIPTION = 280;
 
@@ -51,18 +51,39 @@ function normalizeUrl(raw: string): string | null {
 
 export async function POST(request: NextRequest) {
   try {
-    let body: BidRequestBody;
+    const paymentHeader = request.headers.get("payment-signature");
+
+    let body: Partial<BidRequestBody> = {};
+    let bodyError: string | null = null;
     try {
-      body = await request.json();
+      const raw = await request.text();
+      body = raw.trim() ? JSON.parse(raw) : {};
+      if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error();
     } catch {
-      return bad("Request body must be JSON");
+      bodyError = "Request body must be a JSON object";
     }
 
     const normalizedUrl = normalizeUrl(clean(body.url, 500));
-    if (!normalizedUrl) return bad("A valid http(s) URL is required");
+    const bidAmountRaw = body.bidAmount === undefined ? MIN_BID : Number(body.bidAmount);
+    const bidAmountValid =
+      Number.isInteger(bidAmountRaw) && bidAmountRaw >= MIN_BID && bidAmountRaw <= MAX_BID;
+    const bidAmount = bidAmountValid ? bidAmountRaw : MIN_BID;
 
-    const bidAmount = Number(body.bidAmount);
-    if (!Number.isInteger(bidAmount) || bidAmount < MIN_BID || bidAmount > MAX_BID) {
+    // Discovery probes (x402scan, agentcash) send empty/partial bodies with no payment header.
+    // Per the x402scan spec they must reach the 402 challenge before validation rejects them,
+    // so an unpaid request gets the challenge (quoted at bidAmount, or $1 if absent/invalid)
+    // and validation only hard-fails once a payment is actually presented.
+    if (!paymentHeader && !isMockMode() && isPaymentConfigured()) {
+      const { body: required, header } = await buildPaymentRequired(bidAmount);
+      return NextResponse.json(required, {
+        status: 402,
+        headers: { "PAYMENT-REQUIRED": header, "Cache-Control": "no-store" },
+      });
+    }
+
+    if (bodyError) return bad(bodyError);
+    if (!normalizedUrl) return bad("A valid http(s) URL is required");
+    if (!bidAmountValid) {
       return bad(`bidAmount must be a whole number of USDC between ${MIN_BID} and ${MAX_BID}`);
     }
 
@@ -85,20 +106,7 @@ export async function POST(request: NextRequest) {
     let payment: Awaited<ReturnType<typeof verifyAndSettleBid>> | null = null;
 
     if (!isMockMode()) {
-      const paymentHeader = request.headers.get("payment-signature");
-
-      if (!paymentHeader) {
-        const { body: required, header } = await buildPaymentRequired(bidAmount);
-        return NextResponse.json(required, {
-          status: 402,
-          headers: {
-            "PAYMENT-REQUIRED": header,
-            "Cache-Control": "no-store",
-          },
-        });
-      }
-
-      payment = await verifyAndSettleBid(paymentHeader, bidAmount);
+      payment = await verifyAndSettleBid(paymentHeader!, bidAmount);
       if (!payment.ok) {
         if (payment.status === 402) {
           const { body: required, header } = await buildPaymentRequired(bidAmount, payment.reason);
