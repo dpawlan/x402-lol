@@ -51,18 +51,23 @@ export function ClaimForm({ topBid, onSubmit, initialUrl = "", initialAmount }: 
     <div className="text-center">
       <h1 className="mb-2 text-4xl font-bold text-stone-900 dark:text-stone-100">
         Claim #1 for{" "}
-        <span className="inline-flex items-center gap-1">
+        <span className="inline-flex items-center gap-2 align-middle">
           <button
             onClick={decrementBid}
-            className="text-coral hover:text-coral/80 transition-colors"
+            aria-label="Decrease bid by $1"
+            title="Decrease bid"
+            disabled={currentBid <= 1}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300 text-base font-medium leading-none text-stone-500 transition-colors hover:border-coral hover:text-coral disabled:cursor-not-allowed disabled:opacity-30 dark:border-stone-600 dark:text-stone-400"
             type="button"
           >
-            -
+            &minus;
           </button>
           <span className="text-coral">{formatCurrency(currentBid)}</span>
           <button
             onClick={incrementBid}
-            className="text-coral hover:text-coral/80 transition-colors"
+            aria-label="Increase bid by $1"
+            title="Increase bid"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300 text-base font-medium leading-none text-stone-500 transition-colors hover:border-coral hover:text-coral dark:border-stone-600 dark:text-stone-400"
             type="button"
           >
             +
