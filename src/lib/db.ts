@@ -194,10 +194,22 @@ function getSeedData() {
   ];
 }
 
+let initPromise: Promise<void> | null = null;
+
 async function initializeDatabase(): Promise<void> {
   const client = getSql();
   if (!client || dbInitialized) return;
+  // Memoize so concurrent first requests don't race on CREATE TABLE.
+  if (!initPromise) {
+    initPromise = runMigrations(client).catch((err) => {
+      initPromise = null;
+      throw err;
+    });
+  }
+  await initPromise;
+}
 
+async function runMigrations(client: NeonQueryFunction<false, false>): Promise<void> {
   try {
     await client`
       CREATE TABLE IF NOT EXISTS listings (
