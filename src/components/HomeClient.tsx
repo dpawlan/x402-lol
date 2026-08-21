@@ -5,7 +5,6 @@ import { ClaimForm } from "@/components/ClaimForm";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { TrendingList } from "@/components/TrendingList";
 import { ListingCard, ListingCardCompact } from "@/components/ListingCard";
-import { StatsBar, type SiteStats } from "@/components/StatsBar";
 import { BidModal } from "@/components/BidModal";
 import type { LeaderboardEntry, Activity, TrendingItem } from "@/lib/types";
 
@@ -17,7 +16,6 @@ export function HomeClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedListing, setSelectedListing] = useState<LeaderboardEntry | null>(null);
-  const [stats, setStats] = useState<SiteStats | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -28,7 +26,6 @@ export function HomeClient() {
         setActivities(data.data.recentActivity);
         setTrending(data.data.trending);
         setTopBid(data.data.topBid);
-        setStats(data.data.stats ?? null);
       }
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -114,10 +111,6 @@ export function HomeClient() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
-      <div className="mb-8">
-        <StatsBar stats={stats} />
-      </div>
-
       <div className="mb-12">
         <ClaimForm topBid={topBid} onSubmit={handleQuickBid} />
       </div>
