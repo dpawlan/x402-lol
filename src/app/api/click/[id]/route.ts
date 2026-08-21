@@ -18,7 +18,7 @@ export async function POST(
       );
     }
 
-    const listing = getListingById(listingId);
+    const listing = await getListingById(listingId);
     if (!listing) {
       return NextResponse.json(
         { success: false, error: "Listing not found" },
@@ -26,7 +26,7 @@ export async function POST(
       );
     }
 
-    recordClick(listingId);
+    await recordClick(listingId);
 
     return NextResponse.json({ success: true });
   } catch (error) {
