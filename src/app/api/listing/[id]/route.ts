@@ -18,7 +18,7 @@ export async function GET(
       );
     }
 
-    const listing = getListingById(listingId);
+    const listing = await getListingById(listingId);
 
     if (!listing) {
       return NextResponse.json(

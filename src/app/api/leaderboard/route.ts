@@ -5,11 +5,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const leaderboard = getLeaderboard();
-    const recentActivity = getRecentActivity(5);
-    const trending = getTrending(5);
-    const topBid = getTopBid();
-    const stats = getStats();
+    const [leaderboard, recentActivity, trending, topBid, stats] = await Promise.all([
+      getLeaderboard(),
+      getRecentActivity(5),
+      getTrending(5),
+      getTopBid(),
+      getStats(),
+    ]);
 
     return NextResponse.json({
       success: true,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createOrUpdateListing, getListingByUrl, getTopBid } from "@/lib/db";
+import { createOrUpdateListing } from "@/lib/db";
 import { isMockMode, x402Config } from "@/lib/x402";
 
 export const dynamic = "force-dynamic";
@@ -41,8 +41,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const existingListing = getListingByUrl(normalizedUrl);
-
     const amountToCharge = body.bidAmount;
 
     if (amountToCharge <= 0) {
@@ -56,7 +54,6 @@ export async function POST(request: NextRequest) {
       const paymentHeader = request.headers.get("payment-signature");
 
       if (!paymentHeader) {
-        const topBid = getTopBid();
         return new NextResponse(null, {
           status: 402,
           headers: {
@@ -79,7 +76,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const result = createOrUpdateListing(
+    const result = await createOrUpdateListing(
       normalizedUrl,
       body.name || "",
       body.description || "",
