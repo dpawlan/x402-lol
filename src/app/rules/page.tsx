@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Rules - agenticcommerce.lol",
-  description: "The rules for listing and bidding on agenticcommerce.lol.",
+  title: "Rules - AgenticCommerce.lol",
+  description: "The rules for listing and bidding on AgenticCommerce.lol.",
 };
 
 export default function RulesPage() {

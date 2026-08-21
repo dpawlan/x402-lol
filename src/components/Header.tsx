@@ -6,7 +6,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <span className="text-xl font-bold text-stone-900">
-            <span className="text-coral">≡</span> agenticcommerce.lol
+            <span className="text-coral">≡</span> AgenticCommerce.lol
           </span>
         </Link>
 

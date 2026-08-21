@@ -93,7 +93,7 @@ export const x402Config = {
   isConfigured: IS_CONFIGURED,
 };
 
-const SITE_NAME = new URL(SITE_URL).hostname;
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "AgenticCommerce.lol";
 
 function bidResourceInfo(amountUsdc: number) {
   return {
