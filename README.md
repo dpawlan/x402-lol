@@ -1,4 +1,4 @@
-# x402.lol
+# agenticcommerce.lol (x402 leaderboard)
 
 A paid leaderboard for x402 resources. Bid USDC via x402 to rank your API, agent, or tool.
 
@@ -21,14 +21,14 @@ A paid leaderboard for x402 resources. Bid USDC via x402 to rank your API, agent
    - `X402_PAY_TO_ADDRESS` — Your wallet for bid payments
    - `CDP_API_KEY_ID` / `CDP_API_KEY_SECRET` — Coinbase CDP key for the mainnet facilitator ([portal.cdp.coinbase.com](https://portal.cdp.coinbase.com))
    - `X402_NETWORK` — CAIP-2 network (default: `eip155:8453` Base mainnet; `eip155:84532` for Sepolia testing via the free x402.org facilitator)
-   - `NEXT_PUBLIC_SITE_URL` — `https://x402.lol`
+   - `NEXT_PUBLIC_SITE_URL` — `https://agenticcommerce.lol`
 
 5. **(Later) Custom domain**  
-   Settings → Domains → Add `x402.lol`
+   Settings → Domains → Add `agenticcommerce.lol`
 
 ## What is this?
 
-x402.lol is a visual clone of [outbid.lol](https://outbid.lol) for the x402 ecosystem:
+agenticcommerce.lol is a visual clone of [outbid.lol](https://outbid.lol) for the x402 ecosystem:
 
 - APIs that respond with HTTP 402
 - AI agents that make/receive x402 payments

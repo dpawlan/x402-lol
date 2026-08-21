@@ -14,20 +14,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "x402.lol - The x402 Resource Leaderboard",
+  metadataBase: new URL("https://agenticcommerce.lol"),
+  title: "agenticcommerce.lol — The x402 Resource Leaderboard",
   description:
     "A ranked leaderboard of x402 resources. Pay $1 via x402 to rank your API, agent, or tool. Let your agent outfit itself from a ranked list of x402 endpoints.",
   openGraph: {
-    title: "x402.lol - The x402 Resource Leaderboard",
+    title: "agenticcommerce.lol — The x402 Resource Leaderboard",
     description:
       "Pay $1 via x402 to rank your API, agent, or tool. Discover the best x402 resources.",
-    url: "https://x402.lol",
-    siteName: "x402.lol",
+    url: "https://agenticcommerce.lol",
+    siteName: "agenticcommerce.lol",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "x402.lol - The x402 Resource Leaderboard",
+    title: "agenticcommerce.lol — The x402 Resource Leaderboard",
     description: "Pay $1 via x402 to rank your API, agent, or tool.",
   },
 };

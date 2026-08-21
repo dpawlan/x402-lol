@@ -1,24 +1,25 @@
 import { NextResponse } from "next/server";
 import { x402Config } from "@/lib/x402";
+import { SITE_URL, SITE_NAME } from "@/lib/openapi";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   const discovery = {
-    name: "x402.lol",
+    name: SITE_NAME,
     description: "A ranked leaderboard of x402 resources. Pay $1 USDC via x402 to rank your API, agent, or tool.",
     version: "1.0.0",
     protocol: "x402",
     protocolVersion: "2",
     endpoints: {
       leaderboard: {
-        url: "https://x402.lol/api/leaderboard",
+        url: `${SITE_URL}/api/leaderboard`,
         method: "GET",
         description: "Get the ranked list of x402 resources",
         paymentRequired: false,
       },
       bid: {
-        url: "https://x402.lol/api/bid",
+        url: `${SITE_URL}/api/bid`,
         method: "POST",
         description: "Submit a bid to rank your x402 resource",
         paymentRequired: true,
@@ -33,13 +34,13 @@ export async function GET() {
         ],
       },
       listing: {
-        url: "https://x402.lol/api/listing/{id}",
+        url: `${SITE_URL}/api/listing/{id}`,
         method: "GET",
         description: "Get details for a specific listing",
         paymentRequired: false,
       },
       click: {
-        url: "https://x402.lol/api/click/{id}",
+        url: `${SITE_URL}/api/click/{id}`,
         method: "POST",
         description: "Record a click on a listing",
         paymentRequired: false,
@@ -69,9 +70,9 @@ export async function GET() {
       },
     },
     links: {
-      homepage: "https://x402.lol",
-      api: "https://x402.lol/api/leaderboard",
-      rules: "https://x402.lol/rules",
+      homepage: `${SITE_URL}`,
+      api: `${SITE_URL}/api/leaderboard`,
+      rules: `${SITE_URL}/rules`,
     },
     contact: {
       x402Protocol: "https://x402.org",

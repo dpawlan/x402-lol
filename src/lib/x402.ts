@@ -21,7 +21,7 @@ const FACILITATOR_URL =
   (CDP_KEY_ID && CDP_KEY_SECRET
     ? "https://api.cdp.coinbase.com/platform/v2/x402"
     : "https://x402.org/facilitator");
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://x402.lol";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://agenticcommerce.lol";
 
 /**
  * Mock mode skips payment entirely. It is ONLY allowed when explicitly opted into

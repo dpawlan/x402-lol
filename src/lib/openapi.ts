@@ -3,7 +3,7 @@ import { MIN_BID, MAX_BID, listingSchema, bidRequestSchema, bidResponseSchema } 
 
 export { MIN_BID, MAX_BID };
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://x402.lol").replace(/\/$/, "");
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://agenticcommerce.lol").replace(/\/$/, "");
 export const SITE_NAME = new URL(SITE_URL).hostname;
 export const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "";
 
